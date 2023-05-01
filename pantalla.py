@@ -1,4 +1,5 @@
 import PySimpleGUI as sg
+from instancia import Instancia
 import tp6
 
 def indice_a_layout_instancia(indice: int):
@@ -13,7 +14,7 @@ layout = layout_instancias + [
 
 window = sg.Window('TP Simulacion :)', layout)
 
-def actualizar_pantalla(tiempo_actual: float, TC_de_instancias):
+def actualizar_pantalla(tiempo_actual: float, instancias: list[Instancia]):
     event = window.read(1)  
 
     if 'CERRAR' in event :
@@ -22,12 +23,12 @@ def actualizar_pantalla(tiempo_actual: float, TC_de_instancias):
 
     window['-TIEMPO-'].update(int(tiempo_actual))
     window['-PORCENTAJE_COMPLETO-'].update(texto_porcentaje_completitud(tiempo_actual))
-    actualizar_instancias(TC_de_instancias)
+    actualizar_instancias(instancias)
     window.refresh()
 
-def actualizar_instancias(TC_de_instancias):
-    for indice, tc in enumerate(TC_de_instancias):
-        window['INSTANCIA_' + str(indice)].update(tc)
+def actualizar_instancias(instancias: list[Instancia]):
+    for instancia in instancias:
+        window['INSTANCIA_' + str(instancia.get_id())].update(int(instancia.get_tiempo_comprometido()))
 
 def texto_porcentaje_completitud(tiempo_actual) -> str:
     porcentaje_completitud: float = round(tiempo_actual/tp6.tiempo_final * 100, 2)
