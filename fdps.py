@@ -1,3 +1,5 @@
+from matplotlib import pyplot as plt
+import numpy as np
 import pandas as pd
 from scipy import stats
 
@@ -22,3 +24,13 @@ def nueva_cantidad_de_comandos() -> int:
 def nueva_duracion_de_comando() -> float:
     return valor_segun_fdp(fdp_duracion_comando)
 
+"""
+def graficar_fdp(fdp, minimo, maximo):
+    x = np.linspace(minimo, maximo, 100)
+    plt.plot(x, fdp(x))
+    plt.show()
+
+graficar_fdp(fdp_cantidad_comandos, 1, 10)
+graficar_fdp(fdp_duracion_comando, 42, 136)
+graficar_fdp(fdp_intervalo_turnos, 0, 599)
+"""
