@@ -7,7 +7,7 @@ tiempo_actual: float = 0
 tiempo_final: float = 999999 #Ponele
 
 #control
-cantidad_de_instancias: int = 1
+cantidad_de_instancias: int = 3
 
 #estado
 instancias: list[Instancia] = [Instancia(i) for i in range(cantidad_de_instancias)] #Tienen que ser instancias distintas de la clase asi que por eso el for en vez de usar el (*).

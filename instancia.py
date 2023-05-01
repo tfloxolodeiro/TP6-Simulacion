@@ -13,6 +13,10 @@ class Instancia:
         else: 
             self.tiempo_comprometido += tiempo_de_uso
 
+    def texto_tiempo_ocioso(self, tiempo_actual: float):
+        porcentaje_ocioso: float = round(self.tiempo_ocioso / tiempo_actual * 100, 2)
+        return str(int(self.tiempo_ocioso)) + ' (' + str(porcentaje_ocioso) + '%)'
+
     def get_tiempo_comprometido(self):
         return self.tiempo_comprometido
     
