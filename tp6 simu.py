@@ -23,7 +23,3 @@ def nueva_cantidad_de_comandos():
 
 def nueva_duracion_de_comando():
     return valor_segun_fdp(fdp_duracion_comando)
-
-print(nueva_cantidad_de_comandos())
-print(nueva_cantidad_de_comandos())
-print(nueva_cantidad_de_comandos())
