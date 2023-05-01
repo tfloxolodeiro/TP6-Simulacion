@@ -27,24 +27,3 @@ def nueva_duracion_de_comando():
 print(nueva_cantidad_de_comandos())
 print(nueva_cantidad_de_comandos())
 print(nueva_cantidad_de_comandos())
-
-valores = []
-
-for i in range(999):
-    valores.append(nuevo_intervalo_entre_turnos())
-
-print ("Intervalo entre turnos:", sum(valores) / len(valores))
-
-valores = []
-
-for i in range(999):
-    valores.append(nueva_cantidad_de_comandos())
-
-print ("Cantidad de comandos:", sum(valores) / len(valores))
-
-valores = []
-
-for i in range(999):
-    valores.append(nueva_duracion_de_comando())
-
-print ("Duracion de comandos:", sum(valores) / len(valores))
