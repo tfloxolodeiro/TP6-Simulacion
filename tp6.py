@@ -3,10 +3,10 @@ import numpy
 import pantalla
 
 tiempo_actual: float = 0
-tiempo_final: float = 99999 #Ponele
+tiempo_final: float = 999999 #Ponele
 
 #control
-cantidad_de_instancias: int = 5
+cantidad_de_instancias: int = 2
 
 #estado
 TC_de_instancias = numpy.array([0] * cantidad_de_instancias) #El array de numpy es para poder usar algunos metodos mas power.
@@ -40,19 +40,20 @@ def asignar_uso_a_instancia(tiempo_de_uso: float, indice_instancia: int):
 
 
 def ciclo_de_evento():
-    global tiempo_actual #Segun lo que entiendo, esto sirve para decirle a python que vamos a modificar la variable global y no crear una nueva en esta funcion.
+    global tiempo_actual
     global tiempo_proximo_turno 
 
-    tiempo_actual = tiempo_proximo_turno
-    tiempo_proximo_turno += nuevo_intervalo_entre_turnos()
+    if(tiempo_actual < tiempo_final):
+        tiempo_actual = tiempo_proximo_turno
+        tiempo_proximo_turno += nuevo_intervalo_entre_turnos()
 
-    tiempo_de_uso = nuevo_tiempo_uso_del_bot()
-    instancia_con_menor_TC = indice_menor_TC()
+        tiempo_de_uso = nuevo_tiempo_uso_del_bot()
+        instancia_con_menor_TC = indice_menor_TC()
 
-    asignar_uso_a_instancia(tiempo_de_uso, instancia_con_menor_TC)
+        asignar_uso_a_instancia(tiempo_de_uso, instancia_con_menor_TC)
 
 def main():
-    while(tiempo_actual < tiempo_final):
+    while(True):
         ciclo_de_evento()
         pantalla.actualizar_pantalla(tiempo_actual, TC_de_instancias)
 
