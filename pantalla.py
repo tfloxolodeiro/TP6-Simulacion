@@ -6,16 +6,20 @@ def indice_a_layout_instancia(indice: int):
 
 layout_instancias = list(map(indice_a_layout_instancia, range(tp6.cantidad_de_instancias)))
 
-layout = [
-    [sg.Text('Tiempo actual: '), sg.Text(key='-TIEMPO-'), sg.Text(key='-PORCENTAJE_COMPLETO-')]
-] + layout_instancias
-
-print(layout)
+layout = layout_instancias + [
+    [sg.Text('Tiempo actual: '), sg.Text(key='-TIEMPO-'), sg.Text(key='-PORCENTAJE_COMPLETO-')],
+    [sg.Button('CERRAR')]
+]
 
 window = sg.Window('TP Simulacion :)', layout)
 
 def actualizar_pantalla(tiempo_actual: float, TC_de_instancias):
-    window.read(1)
+    event = window.read(1)  
+
+    if 'CERRAR' in event :
+        window.Close()
+        exit()
+
     window['-TIEMPO-'].update(int(tiempo_actual))
     window['-PORCENTAJE_COMPLETO-'].update(texto_porcentaje_completitud(tiempo_actual))
     actualizar_instancias(TC_de_instancias)

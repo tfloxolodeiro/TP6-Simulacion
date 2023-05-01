@@ -3,10 +3,10 @@ import numpy
 import pantalla
 
 tiempo_actual: float = 0
-tiempo_final: float = 999999999 #Ponele
+tiempo_final: float = 99999 #Ponele
 
 #control
-cantidad_de_instancias: int = 10
+cantidad_de_instancias: int = 5
 
 #estado
 TC_de_instancias = numpy.array([0] * cantidad_de_instancias) #El array de numpy es para poder usar algunos metodos mas power.
