@@ -11,7 +11,7 @@ cantidad_de_instancias: int = 2
 #estado
 TC_de_instancias = numpy.array([0] * cantidad_de_instancias) #El array de numpy es para poder usar algunos metodos mas power.
 
-#eventos futuros
+#evento futuro
 tiempo_proximo_turno: float = nuevo_intervalo_entre_turnos() #Inicializa con un turno
 
 

@@ -9,9 +9,9 @@ def fdp(archivo: str):
 def valor_segun_fdp(fdp):
     return fdp.resample(1)[0][0]
 
-fdp_intervalo_turnos = fdp('intervalos entre turnos.xlsx')
-fdp_cantidad_comandos = fdp('cantidad de comandos.xlsx')
-fdp_duracion_comando = fdp('duracion de comandos.xlsx')
+fdp_intervalo_turnos = fdp('datos/intervalos entre turnos.xlsx')
+fdp_cantidad_comandos = fdp('datos/cantidad de comandos.xlsx')
+fdp_duracion_comando = fdp('datos/duracion de comandos.xlsx')
 
 def nuevo_intervalo_entre_turnos() -> float:
     return valor_segun_fdp(fdp_intervalo_turnos)
