@@ -3,7 +3,7 @@ from instancia import Instancia
 import pantalla
 from typing_extensions import TypedDict
 
-cantidad_de_instancias: int = 3
+cantidad_de_instancias: int = 4
 
 Variables = TypedDict('Variables', {"tiempo_actual": float, "tiempo_final": float, "cantidad_de_instancias": int, "instancias_bot": list[Instancia], "tiempo_proximo_turno": float, "espera_total": float, "turnos_totales": int} )
 

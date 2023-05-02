@@ -1,19 +1,20 @@
-from matplotlib import pyplot as plt
-import numpy as np
+from matplotlib import pyplot as plt #No borrar, es usado en funcion comentada
+import numpy as np #idem
 import pandas as pd
 from scipy import stats
 
-def fdp(archivo: str):
-    data_frame = pd.read_excel(archivo)
-    datos = data_frame['Datos'].values
+data_frame = pd.read_excel("datos.xlsx")
+
+def fdp(columna: str):
+    datos = data_frame[columna].values
     return stats.gaussian_kde(datos)
 
 def valor_segun_fdp(fdp):
     return fdp.resample(1)[0][0]
 
-fdp_intervalo_turnos = fdp('datos/intervalos entre turnos.xlsx')
-fdp_cantidad_comandos = fdp('datos/cantidad de comandos.xlsx')
-fdp_duracion_comando = fdp('datos/duracion de comandos.xlsx')
+fdp_intervalo_turnos = fdp('IET') #Intervalo entre turnos
+fdp_cantidad_comandos = fdp('CDC') #Cantidad de comandos
+fdp_duracion_comando = fdp('DDC') #Duracion de comando
 
 def nuevo_intervalo_entre_turnos() -> float:
     return valor_segun_fdp(fdp_intervalo_turnos)
