@@ -18,6 +18,7 @@ layout = [
     + [[sg.Text('RESULTADOS', background_color='Black')]] \
     + layout_ocioso_instancias \
     + [[sg.Text('Porcentaje tiempo ocioso: '), sg.Text(key='OCIOSO_TOTAL')]] \
+    + [[sg.Text('Promedio tiempo de espera: '), sg.Text(key='PROMEDIO_ESPERA')]] \
     + [[sg.Button('CERRAR')]]
 
 window = sg.Window('TP Simulacion :)', layout)
@@ -32,11 +33,19 @@ def actualizar_pantalla(variables: tp6.Variables):
     actualizar_tiempo_actual(variables)
     actualizar_instancias(variables)
     actualizar_tiempo_ocioso(variables)
+    actualizar_tiempo_espera(variables)
     window.refresh()
+
+def actualizar_tiempo_espera(variables: tp6.Variables):
+    espera_total = variables['espera_total']
+    turnos_totales = variables['turnos_totales']
+    promedio_espera = espera_total / turnos_totales
+
+    window['PROMEDIO_ESPERA'].update(str(int(promedio_espera)))
 
 def actualizar_tiempo_ocioso(variables: tp6.Variables):
     tiempo_ocioso_porcentual: float = porcentaje_tiempo_ocioso(variables)
-    texto_ocioso: str = '(' + str(tiempo_ocioso_porcentual) + '%)'
+    texto_ocioso: str = pretty_porcentaje(tiempo_ocioso_porcentual)
 
     window['OCIOSO_TOTAL'].update(texto_ocioso)
 
@@ -67,4 +76,7 @@ def texto_porcentaje_completitud(variables: tp6.Variables) -> str:
     tiempo_final = variables["tiempo_final"]
     
     porcentaje_completitud: float = round(tiempo_actual/tiempo_final * 100, 2)
-    return '(' + str(porcentaje_completitud) + '%)' 
+    return pretty_porcentaje(porcentaje_completitud)
+
+def pretty_porcentaje(porcentaje: float) -> str:
+    return '(' + str(porcentaje) + '%)' 

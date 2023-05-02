@@ -5,14 +5,16 @@ from typing_extensions import TypedDict
 
 cantidad_de_instancias: int = 3
 
-Variables = TypedDict('Variables', {"tiempo_actual": float, "tiempo_final": float, "cantidad_de_instancias": int, "instancias_bot": list[Instancia], "tiempo_proximo_turno": float} )
+Variables = TypedDict('Variables', {"tiempo_actual": float, "tiempo_final": float, "cantidad_de_instancias": int, "instancias_bot": list[Instancia], "tiempo_proximo_turno": float, "espera_total": float, "turnos_totales": int} )
 
 variables_simulacion: Variables = {
     "tiempo_actual": 0,
-    "tiempo_final": 999999, #Ponele
+    "tiempo_final": 86400, #1 dia
     "cantidad_de_instancias": cantidad_de_instancias, #Control
     "instancias_bot": [Instancia(i) for i in range(cantidad_de_instancias)], #Estado
-    "tiempo_proximo_turno": nuevo_intervalo_entre_turnos() #Evento futuro
+    "tiempo_proximo_turno": nuevo_intervalo_entre_turnos(), #Evento futuro
+    "espera_total": 0,
+    "turnos_totales": 0
 
 }
 
@@ -37,11 +39,15 @@ def ciclo_de_evento():
 
     if(tiempo_actual < tiempo_final):
         variables_simulacion["tiempo_actual"] = proximo_turno
+        variables_simulacion["turnos_totales"] += 1
         variables_simulacion["tiempo_proximo_turno"] += nuevo_intervalo_entre_turnos()
 
-        tiempo_de_uso = nuevo_tiempo_uso_del_bot()
 
-        instancia_con_menor_TC().asignar_tiempo(tiempo_de_uso, tiempo_actual)
+        instancia_asignada = instancia_con_menor_TC()
+        variables_simulacion["espera_total"] += instancia_asignada.espera_hasta_disponibilidad(tiempo_actual)
+        
+        tiempo_de_uso = nuevo_tiempo_uso_del_bot()
+        instancia_asignada.asignar_tiempo(tiempo_de_uso, tiempo_actual)
 
 def main():
     while(True):
