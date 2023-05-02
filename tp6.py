@@ -1,20 +1,20 @@
 from fdps import nuevo_intervalo_entre_turnos, nueva_cantidad_de_comandos, nueva_duracion_de_comando
-import numpy
 from instancia import Instancia
 import pantalla
+from typing_extensions import TypedDict
 
-tiempo_actual: float = 0
-tiempo_final: float = 999999 #Ponele
-
-#control
 cantidad_de_instancias: int = 3
 
-#estado
-instancias: list[Instancia] = [Instancia(i) for i in range(cantidad_de_instancias)] #Tienen que ser instancias distintas de la clase asi que por eso el for en vez de usar el (*).
+Variables = TypedDict('Variables', {"tiempo_actual": float, "tiempo_final": float, "cantidad_de_instancias": int, "instancias_bot": list[Instancia], "tiempo_proximo_turno": float} )
 
-#evento futuro
-tiempo_proximo_turno: float = nuevo_intervalo_entre_turnos() #Inicializa con un turno
+variables_simulacion: Variables = {
+    "tiempo_actual": 0,
+    "tiempo_final": 999999, #Ponele
+    "cantidad_de_instancias": cantidad_de_instancias, #Control
+    "instancias_bot": [Instancia(i) for i in range(cantidad_de_instancias)], #Estado
+    "tiempo_proximo_turno": nuevo_intervalo_entre_turnos() #Evento futuro
 
+}
 
 def nuevo_tiempo_uso_del_bot() -> float:
     cantidad_comandos: int = nueva_cantidad_de_comandos()
@@ -26,16 +26,18 @@ def nuevo_tiempo_uso_del_bot() -> float:
 
 
 def instancia_con_menor_TC() -> float:
-    return min(instancias, key=Instancia.get_tiempo_comprometido)
+    return min(variables_simulacion["instancias_bot"], key=Instancia.get_tiempo_comprometido)
 
 
 def ciclo_de_evento():
-    global tiempo_actual
-    global tiempo_proximo_turno 
+    global variables_simulacion
+    tiempo_actual = variables_simulacion["tiempo_actual"]
+    tiempo_final = variables_simulacion["tiempo_final"]
+    proximo_turno = variables_simulacion["tiempo_proximo_turno"]
 
     if(tiempo_actual < tiempo_final):
-        tiempo_actual = tiempo_proximo_turno
-        tiempo_proximo_turno += nuevo_intervalo_entre_turnos()
+        variables_simulacion["tiempo_actual"] = proximo_turno
+        variables_simulacion["tiempo_proximo_turno"] += nuevo_intervalo_entre_turnos()
 
         tiempo_de_uso = nuevo_tiempo_uso_del_bot()
 
@@ -44,7 +46,7 @@ def ciclo_de_evento():
 def main():
     while(True):
         ciclo_de_evento()
-        pantalla.actualizar_pantalla(tiempo_actual, instancias)
+        pantalla.actualizar_pantalla(variables_simulacion)
 
 if __name__ == "__main__":
     main()
