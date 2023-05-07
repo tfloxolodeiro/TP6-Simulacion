@@ -1,31 +1,46 @@
+from fdps import nueva_cantidad_de_comandos, nueva_duracion_de_comando
+
+
+def nuevo_tiempo_uso_del_bot() -> float:
+    cantidad_comandos: int = nueva_cantidad_de_comandos()
+    tiempo_de_uso: float = 0
+    for i in range(cantidad_comandos):
+        tiempo_de_uso += nueva_duracion_de_comando() #Esto es valido? En la realidad la duracion del comando se deberia saber al ejecutarlo, no al pedir el turno.
+
+    return tiempo_de_uso 
+
 class Instancia:
     id: int
-    tiempo_comprometido: float = 0
+    proxima_salida: float = float("inf") #High value
     tiempo_ocioso: float = 0
+    inicio_tiempo_ocioso: float = 0
 
     def __init__(self, id):
         self.id = id
 
-    def asignar_tiempo(self, tiempo_de_uso: float, tiempo_actual: float):
-        if(self.esta_ociosa(tiempo_actual)): 
-            self.tiempo_ocioso += tiempo_actual - self.tiempo_comprometido
-            self.tiempo_comprometido = tiempo_actual + tiempo_de_uso
-        else: 
-            self.tiempo_comprometido += tiempo_de_uso
+    def atender(self, tiempo_actual: float):
+        self.tiempo_ocioso += tiempo_actual - self.inicio_tiempo_ocioso
+        self.proxima_salida = tiempo_actual + nuevo_tiempo_uso_del_bot()        
 
-    def esta_ociosa(self, tiempo_actual: float):
-        return tiempo_actual >= self.tiempo_comprometido
-
-    def espera_hasta_disponibilidad(self, tiempo_actual: float):
-        return max(0, self.tiempo_comprometido - tiempo_actual)
-
+    def terminarDeAtender(self, tiempo_actual: float):
+        self.inicio_tiempo_ocioso = tiempo_actual
+        self.proxima_salida = float("inf")
 
     def texto_tiempo_ocioso(self, tiempo_actual: float):
         porcentaje_ocioso: float = round(self.tiempo_ocioso / tiempo_actual * 100, 2)
         return str(int(self.tiempo_ocioso)) + ' (' + str(porcentaje_ocioso) + '%)'
 
-    def get_tiempo_comprometido(self):
-        return self.tiempo_comprometido
+    def texto_tiempo_salida(self):
+        if(self.esta_libre()):
+            return "Libre"
+        else:
+            return str(int(self.proxima_salida))
+
+    def esta_libre(self):
+        return self.proxima_salida == float("inf")
+
+    def get_proxima_salida(self):
+        return self.proxima_salida
     
     def get_tiempo_ocioso(self):
         return self.tiempo_ocioso

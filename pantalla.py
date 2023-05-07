@@ -14,6 +14,7 @@ layout_ocioso_instancias = list(map(indice_a_layout_ocioso_de_instancia, range(t
 layout = [
     [[sg.Text('ESTADO', background_color='Black')]] \
     + [sg.Text('Tiempo actual: '), sg.Text(key='-TIEMPO-'), sg.Text(key='-PORCENTAJE_COMPLETO-')]] \
+    + [[sg.Text('Cola: '), sg.Text(key='COLA')]] \
     + layout_instancias  \
     + [[sg.Text('RESULTADOS', background_color='Black')]] \
     + layout_ocioso_instancias \
@@ -31,13 +32,14 @@ def actualizar_pantalla(variables: tp6.Variables):
         exit()
 
     actualizar_tiempo_actual(variables)
+    actualizar_cola(variables)
     actualizar_instancias(variables)
     actualizar_tiempo_ocioso(variables)
     actualizar_tiempo_espera(variables)
     window.refresh()
 
 def actualizar_tiempo_espera(variables: tp6.Variables):
-    espera_total = variables['espera_total']
+    espera_total = variables["suma_fin_tiempo_espera"] - variables["suma_inicio_tiempo_espera"]  
     turnos_totales = variables['turnos_totales']
     promedio_espera = espera_total / turnos_totales
 
@@ -57,6 +59,11 @@ def porcentaje_tiempo_ocioso(variables: tp6.Variables):
     tiempo_total: float = tiempo_actual * len(instancias) #Es el tiempo entre todas las instancias
     return round( tiempo_ocioso_total / tiempo_total  * 100, 2) 
 
+def actualizar_cola(variables: tp6.Variables):
+    cola = variables['cola']
+
+    window['COLA'].update(cola)
+
 def actualizar_tiempo_actual(variables: tp6.Variables):
     tiempo_actual = variables['tiempo_actual']
 
@@ -68,7 +75,7 @@ def actualizar_instancias(variables: tp6.Variables):
     tiempo_actual = variables["tiempo_actual"]
 
     for instancia in instancias:
-        window['INSTANCIA_' + str(instancia.get_id())].update(int(instancia.get_tiempo_comprometido()))
+        window['INSTANCIA_' + str(instancia.get_id())].update(instancia.texto_tiempo_salida())
         window['OCIOSO_' + str(instancia.get_id())].update(instancia.texto_tiempo_ocioso(tiempo_actual))
 
 def texto_porcentaje_completitud(variables: tp6.Variables) -> str:
