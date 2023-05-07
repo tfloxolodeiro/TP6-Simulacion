@@ -11,12 +11,14 @@ def nuevo_tiempo_uso_del_bot() -> float:
 
 class Instancia:
     id: int
+    es_premium: bool
     proxima_salida: float = float("inf") #High value
     tiempo_ocioso: float = 0
     inicio_tiempo_ocioso: float = 0
 
-    def __init__(self, id):
+    def __init__(self, id, es_premium):
         self.id = id
+        self.es_premium = es_premium
 
     def atender(self, tiempo_actual: float):
         self.tiempo_ocioso += tiempo_actual - self.inicio_tiempo_ocioso
@@ -48,3 +50,8 @@ class Instancia:
     def get_id(self):
         return self.id
     
+    def get_es_premium(self):
+        return self.es_premium
+    
+    def es_comun(self):
+        return not self.es_premium
